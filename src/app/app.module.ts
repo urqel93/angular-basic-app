@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {NavbarComponent} from './nav/navbar.component';
-import {TOASTR_TOKEN} from './events/common/toastr.service';
+import {TOASTR_TOKEN} from './common/toastr.service';
 import {RouterModule} from '@angular/router';
 import {appRoutes} from './routes';
 import {Error404Component} from './errors/404.component';
@@ -17,13 +17,21 @@ import {
   CreateEventComponent,
   CreateSessionComponent,
   SessionListComponent,
-  DurationPipe
+  DurationPipe,
+  UpvoteComponent,
+  EventResolver
 } from './events/index';
 import {AuthService} from './user/auth.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CollapsibleWellComponent} from './events/common/collapsible-well.component';
+import {CollapsibleWellComponent} from './common/collapsible-well.component';
+import {JQUERY_TOKEN} from './common/jQuery.service';
+import {SimpleModalComponent} from './common/simple-modal.component';
+import {ModalTriggerDirective} from './common/modalTrigger.directive';
+import {VoterService} from './events/event-details/voter.service';
+import {HttpClientModule} from '@angular/common/http';
 
-let toastr = window['toastr'];
+const toastr = window['toastr'];
+const jQuery = window['$'];
 
 @NgModule({
   declarations: [
@@ -37,12 +45,16 @@ let toastr = window['toastr'];
     SessionListComponent,
     CollapsibleWellComponent,
     DurationPipe,
+    SimpleModalComponent,
+    UpvoteComponent,
+    ModalTriggerDirective,
     Error404Component
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [
@@ -51,9 +63,12 @@ let toastr = window['toastr'];
       provide: TOASTR_TOKEN,
       useValue: toastr
     },
+    {provide: JQUERY_TOKEN, useValue: jQuery},
     EventRouteActivator,
     EventListResolverService,
-    AuthService
+    AuthService,
+    VoterService,
+    EventResolver
   ],
   bootstrap: [AppComponent]
 })

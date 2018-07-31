@@ -31,8 +31,9 @@ export class CreateEventComponent {
   }
 
   saveEvent(values) {
-    this.eventService.saveEvent(values);
-    this.router.navigate(['/events']);
+    this.eventService.saveEvent(values).subscribe(() => {
+      this.router.navigate(['/events']);
+    });
   }
 
   cancel() {
